@@ -2,9 +2,6 @@ package com.example.LogRoot.global.common.path;
 
 public class StoragePath {
 
-    // 버킷 이름
-    public static final String BUCKET_NAME = "shortform-bucket";
-
     // 공통 루트 경로
     private static final String INPUT_ROOT = "input";
     private static final String OUTPUT_ROOT = "output";

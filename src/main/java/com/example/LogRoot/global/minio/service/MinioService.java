@@ -1,6 +1,5 @@
 package com.example.LogRoot.global.minio.service;
 
-import com.example.LogRoot.global.common.path.StoragePath;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,9 @@ public class MinioService {
     @Value("${minio.endpoint}")
     private String endpoint;
 
+    @Value("${minio.bucket}")
+    private String bucketName;
+
     /**
      * 파일을 MinIO에 업로드하고 접근 가능한 URL을 반환합니다.
      */
@@ -26,16 +28,14 @@ public class MinioService {
         try {
             minioClient.putObject(
                     PutObjectArgs.builder()
-                            .bucket(StoragePath.BUCKET_NAME)
+                            .bucket(bucketName)
                             .object(objectKey)
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
                             .build()
             );
 
-            // 업로드된 파일의 전체 URL 반환 (직접 접근 주소 생성)
-            // 도커 환경이나 로컬 환경에 따라 형식이 다를 수 있으니 endpoint를 기반으로 생성합니다.
-            return String.format("%s/%s/%s", endpoint, StoragePath.BUCKET_NAME, objectKey);
+            return String.format("%s/%s/%s", endpoint, bucketName, objectKey);
 
         } catch (Exception e) {
             log.error("MinIO upload failed: {}", e.getMessage());
