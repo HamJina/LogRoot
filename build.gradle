@@ -40,6 +40,15 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// MinIO Java SDK
+	implementation 'io.minio:minio:8.5.7'
+
+	// MinIO 8.x 버전부터 필요한 의존성들 (버전에 따라 필요할 수 있음)
+	implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations'
+	implementation 'com.fasterxml.jackson.core:jackson-core'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 tasks.named('test') {
