@@ -14,18 +14,17 @@ services:
 
   app:
     build: .
-    container_name: logroot-app
-    depends_on:
-      - db
+    container_name: spring-app
     ports:
       - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/shortform?currentSchema=public&reWriteBatchedInserts=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-
-      AI_SERVER_URL: http://host.docker.internal:8000
-      AI_SERVER_WEBHOOK_TOKEN: local-shared-secret
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/shortform
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
 
 volumes:
   postgres_data:
