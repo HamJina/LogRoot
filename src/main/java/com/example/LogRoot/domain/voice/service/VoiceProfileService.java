@@ -1,16 +1,20 @@
 package com.example.LogRoot.domain.voice.service;
 
 import com.example.LogRoot.domain.voice.dto.response.CreateVoiceProfileResDto;
+import com.example.LogRoot.domain.voice.dto.response.VoiceProfileDto;
+import com.example.LogRoot.domain.voice.dto.response.VoiceProfilesListResDto;
 import com.example.LogRoot.domain.voice.entity.VoiceProfile;
 import com.example.LogRoot.domain.voice.repository.VoiceProfileRepository;
 import com.example.LogRoot.global.common.path.StoragePath;
 import com.example.LogRoot.global.minio.service.MinioService;
+import com.sun.jdi.VoidValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -33,5 +37,12 @@ public class VoiceProfileService {
         voiceProfileRepository.save(VoiceProfile.createProfile(profileId, userId, name, objectKey, audioUrl));
 
         return CreateVoiceProfileResDto.from(profile);
+    }
+
+    @Transactional(readOnly = true)
+    public VoiceProfilesListResDto getVoiceProfiles(String userId) {
+        List<VoiceProfile> profiles = voiceProfileRepository.findAllByUserId(userId);
+
+        return VoiceProfilesListResDto.from(profiles);
     }
 }
