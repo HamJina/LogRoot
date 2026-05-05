@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "voice_profiles")
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
+@Getter
 public class VoiceProfile {
 
     @Id

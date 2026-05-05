@@ -19,7 +19,7 @@ public class StoragePath {
      * 원본 비디오 업로드 경로 생성
      * 규칙: input/jobs/{jobId}/source.{ext}
      */
-    public static String RawVideoPath(String jobId, String extension) {
+    public static String getRawVideoPath(String jobId, String extension) {
         return String.format("%s/jobs/%s/source.%s",
                 INPUT_ROOT, jobId, extension);
     }
