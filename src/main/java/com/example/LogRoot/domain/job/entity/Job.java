@@ -81,4 +81,9 @@ public class Job extends BaseTimeEntity {
         this.resultJson = resultJson;
         this.completedAt = LocalDateTime.now();
     }
+
+    public void updateProgress(String progressJson) {
+        this.status = JobStatus.PROCESSING;
+        this.progressJson = progressJson;
+    }
 }
