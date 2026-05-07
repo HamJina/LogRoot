@@ -1,6 +1,7 @@
 package com.example.LogRoot.domain.job.controller;
 
 import com.example.LogRoot.domain.job.dto.response.CreateJobResDto;
+import com.example.LogRoot.domain.job.dto.response.GetJobStatusResDto;
 import com.example.LogRoot.domain.job.service.JobService;
 import com.example.LogRoot.global.common.response.GlobalResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Job", description = "숏폼 생성 작업 API")
@@ -34,5 +32,11 @@ public class JobController {
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED)
                 .body(GlobalResponse.success(HttpStatus.ACCEPTED.value(), response));
+    }
+
+    @Operation(summary = "Job 상태 조회", description = "작업의 진행 단계와 퍼센트를 조회합니다.")
+    @GetMapping("/{job_id}/status")
+    public ResponseEntity<GetJobStatusResDto> getJobStatus(@PathVariable("job_id") String jobId) {
+        return ResponseEntity.ok(jobService.getJobStatus(jobId));
     }
 }
