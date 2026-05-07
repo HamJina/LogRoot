@@ -21,8 +21,9 @@ public enum JobErrorCode implements ErrorCode {
 
     // AI 서버 파이프라인 및 통신 관련
     AI_SERVER_REQUEST_FAILED(HttpStatus.BAD_GATEWAY, "AI 서버로 작업을 전달하는 데 실패했습니다."),
-    AI_PIPELINE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AI 처리 파이프라인 진행 중 내부 오류가 발생했습니다.");
+    AI_PIPELINE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AI 처리 파이프라인 진행 중 내부 오류가 발생했습니다."),
 
+    JOB_NOT_DONE(HttpStatus.CONFLICT, "작업이 아직 완료되지 않았습니다.");
     private final HttpStatus status;
     private final String message;
 

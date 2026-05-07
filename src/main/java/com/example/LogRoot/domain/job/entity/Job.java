@@ -38,6 +38,9 @@ public class Job extends BaseTimeEntity {
     @Column(name = "progress_json", columnDefinition = "jsonb")
     private String progressJson;
 
+    @Column(columnDefinition = "jsonb")
+    private String resultJson;
+
     // --- 에러 및 완료 관련 필드 추가 ---
 
     @Column(name = "error_code")
@@ -71,5 +74,11 @@ public class Job extends BaseTimeEntity {
                 .optionsJson(optionsJson)
                 .status(JobStatus.QUEUED)
                 .build();
+    }
+
+    public void complete(String resultJson) {
+        this.status = JobStatus.DONE;
+        this.resultJson = resultJson;
+        this.completedAt = LocalDateTime.now();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.LogRoot.domain.job.controller;
 
 import com.example.LogRoot.domain.job.dto.response.CreateJobResDto;
+import com.example.LogRoot.domain.job.dto.response.GetClipsResDto;
 import com.example.LogRoot.domain.job.dto.response.GetJobStatusResDto;
 import com.example.LogRoot.domain.job.service.JobService;
 import com.example.LogRoot.global.common.response.GlobalResponse;
@@ -38,5 +39,11 @@ public class JobController {
     @GetMapping("/{job_id}/status")
     public ResponseEntity<GetJobStatusResDto> getJobStatus(@PathVariable("job_id") String jobId) {
         return ResponseEntity.ok(jobService.getJobStatus(jobId));
+    }
+
+    @Operation(summary = "완료된 클립 목록 조회", description = "작업이 완료(done)된 경우에만 클립 목록을 반환합니다.")
+    @GetMapping("/{job_id}/clips")
+    public ResponseEntity<GetClipsResDto> getClips(@PathVariable("job_id") String jobId) {
+        return ResponseEntity.ok(jobService.getJobClips(jobId));
     }
 }

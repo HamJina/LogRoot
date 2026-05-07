@@ -3,9 +3,11 @@ package com.example.LogRoot.domain.job.service;
 import com.example.LogRoot.domain.ai.client.AiServerClient;
 import com.example.LogRoot.domain.job.dto.request.CreateJobReqDto;
 import com.example.LogRoot.domain.job.dto.response.CreateJobResDto;
+import com.example.LogRoot.domain.job.dto.response.GetClipsResDto;
 import com.example.LogRoot.domain.job.dto.response.GetJobStatusResDto;
 import com.example.LogRoot.domain.job.entity.Job;
 import com.example.LogRoot.domain.job.exception.JobErrorCode;
+import com.example.LogRoot.domain.job.exception.JobException;
 import com.example.LogRoot.domain.job.repository.JobRepository;
 import com.example.LogRoot.domain.job.type.JobStatus;
 import com.example.LogRoot.domain.voice.entity.VoiceProfile;
@@ -14,6 +16,7 @@ import com.example.LogRoot.global.common.error.exception.CustomException;
 import com.example.LogRoot.global.common.path.StoragePath;
 import com.example.LogRoot.global.minio.service.MinioService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -92,5 +96,33 @@ public class JobService {
                 .progress(progressInfo)
                 .error(errorInfo)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public GetClipsResDto getJobClips(String jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new JobException(JobErrorCode.JOB_NOT_FOUND));
+
+        if (job.getStatus() != JobStatus.DONE) {
+            throw new JobException(JobErrorCode.JOB_NOT_DONE);
+        }
+
+        try {
+            String json = job.getResultJson();
+
+            if (json == null) return new GetClipsResDto(jobId, List.of());
+
+            List<GetClipsResDto.ClipInfo> clips = objectMapper.readValue(
+                    json,
+                    new TypeReference<List<GetClipsResDto.ClipInfo>>() {}
+            );
+
+            return GetClipsResDto.builder()
+                    .job_id(job.getJobId())
+                    .clips(clips)
+                    .build();
+        } catch (JsonProcessingException e) {
+            throw new JobException(JobErrorCode.JSON_PARSING_ERROR);
+        }
     }
 }
