@@ -24,7 +24,7 @@ public class JobController {
 
     @Operation(summary = "Job 생성", description = "원본 영상을 업로드하고 AI 파이프라인을 실행합니다.")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<GlobalResponse<CreateJobResDto>> createJob(
+    public ResponseEntity<CreateJobResDto> createJob(
             @RequestPart("file") MultipartFile file,
             @RequestPart("options") String options) throws JsonProcessingException {
 
@@ -32,7 +32,7 @@ public class JobController {
 
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED)
-                .body(GlobalResponse.success(HttpStatus.ACCEPTED.value(), response));
+                .body(response);
     }
 
     @Operation(summary = "Job 상태 조회", description = "작업의 진행 단계와 퍼센트를 조회합니다.")

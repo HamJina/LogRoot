@@ -27,7 +27,7 @@ public record CreateJobResDto(
 
         return CreateJobResDto.builder()
                 .job_id(job.getJobId())
-                .status(job.getStatus().name())
+                .status(job.getStatus().name().toLowerCase())
                 .created_at(job.getCreatedAt())
                 .estimated_duration_sec(180) // 비즈니스 로직에 따라 산출
                 ._links(new JobLinks(
