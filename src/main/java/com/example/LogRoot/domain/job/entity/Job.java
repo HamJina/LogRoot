@@ -4,6 +4,8 @@ import com.example.LogRoot.domain.job.type.JobStatus;
 import com.example.LogRoot.global.common.mapped.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
@@ -32,13 +34,16 @@ public class Job extends BaseTimeEntity {
     @Column(name = "source_video_url", nullable = false)
     private String sourceVideoUrl;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "options_json", columnDefinition = "jsonb")
     private String optionsJson;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "progress_json", columnDefinition = "jsonb")
     private String progressJson;
 
-    @Column(columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "result_json", columnDefinition = "jsonb") // 💡 name 속성 명시적으로 추가
     private String resultJson;
 
     // --- 에러 및 완료 관련 필드 추가 ---
